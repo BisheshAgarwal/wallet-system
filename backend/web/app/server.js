@@ -18,14 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
-// Global error handler middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res
-    .status(500)
-    .send({ message: "Internal server error", error: err.message });
-});
-
 routers.map((router) => app.use("/api/", router));
 
 app.get(["/", "/api"], (req, res) => {
@@ -45,3 +37,11 @@ mongoose
     });
   })
   .catch((err) => console.log(err));
+
+// Global error handler middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res
+    .status(500)
+    .send({ message: "Internal server error", error: err.message });
+});

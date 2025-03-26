@@ -4,4 +4,4 @@ const debug = require("debug")("routers");
 
 debug("Loading");
 
-module.exports = [require("./walletRouter")];
+module.exports = [require("./walletRouter"), require("./transactionRouter")];

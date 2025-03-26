@@ -1,6 +1,6 @@
 "use strict";
 
-const debug = require("debug")("profileRouter:info");
+const debug = require("debug")("walletRouter:info");
 const express = require("express");
 
 const router = express.Router();

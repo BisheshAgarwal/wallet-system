@@ -10,4 +10,6 @@ debug("Loading");
 
 router.post("/setup", walletController.setup);
 
+router.get("/wallet/:walletId", walletController.getDetailsById);
+
 module.exports = router;

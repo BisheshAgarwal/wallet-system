@@ -40,6 +40,33 @@ async function setup(req, res, next) {
   }
 }
 
+async function getDetailsById(req, res, next) {
+  try {
+    const { walletId } = req.params;
+
+    if (!walletId) {
+      return res.status(400).json({ message: "Invalid wallet id" });
+    }
+
+    const wallet = await Wallet.findById(walletId);
+
+    if (!wallet) {
+      return res.status(404).json({ message: "Wallet not found" });
+    }
+
+    return res.status(200).json({
+      _id: wallet._id,
+      balance: wallet.balance,
+      name: wallet.name,
+      date: wallet.date,
+    });
+  } catch (error) {
+    console.error("Error:", err.message);
+    next(err);
+  }
+}
+
 module.exports = {
   setup,
+  getDetailsById,
 };

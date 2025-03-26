@@ -1,0 +1,15 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node app/server.js",
+    "dev": "nodemon app/server.js"
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.17.1",
+    "mongoose": "^8.13.0",
+    "morgan": "^1.10.0"
+  }
+}

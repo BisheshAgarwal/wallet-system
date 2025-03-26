@@ -1,0 +1,19 @@
+{
+  "configurations": [
+    {
+      "name": "Attach to backend backend container",
+      "type": "node",
+      "request": "attach",
+      "protocol": "inspector",
+      "restart": true,
+      "port": 9229,
+      "address": "localhost",
+      "localRoot": "${workspaceFolder}/",
+      "remoteRoot": "/",
+      "skipFiles": [
+        "${workspaceFolder}/web/node_modules/**/*.js",
+        "<node_internals>/**/*.js"
+      ]
+    }
+  ]
+}

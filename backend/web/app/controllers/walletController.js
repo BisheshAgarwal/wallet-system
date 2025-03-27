@@ -7,16 +7,26 @@ debug("Loading");
 
 async function setup(req, res, next) {
   try {
-    const { balance, name } = req.body;
+    const { balance = 0, name } = req.body;
 
-    if (!balance || !name) {
-      return res.status(400).json({ message: "Balance and name are required" });
+    if (!name) {
+      return res.status(400).json({ message: "Name is required" });
+    }
+
+    if (
+      balance &&
+      (!Number.isInteger(Number(balance)) || Number(balance) < 0)
+    ) {
+      return res.status(400).json({ message: "Invalid skip value" });
     }
 
     const wallet = await Wallet.findOne({ name });
 
     if (wallet) {
-      return res.status(400).json({ message: "Wallet already exists" });
+      return res.status(200).json({
+        message: "Wallet already exists with this username",
+        data: wallet,
+      });
     }
 
     const newWallet = new Wallet({
@@ -55,10 +65,13 @@ async function getDetailsById(req, res, next) {
     }
 
     return res.status(200).json({
-      _id: wallet._id,
-      balance: wallet.balance,
-      name: wallet.name,
-      date: wallet.date,
+      message: "Wallet found",
+      data: {
+        _id: wallet._id,
+        balance: wallet.balance,
+        name: wallet.name,
+        date: wallet.date,
+      },
     });
   } catch (error) {
     console.error("Error:", err.message);

@@ -6,6 +6,7 @@
     "dev": "nodemon app/server.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "debug": "^4.1.1",
     "dotenv": "^16.4.7",
     "express": "^4.17.1",

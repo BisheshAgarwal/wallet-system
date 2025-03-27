@@ -56,8 +56,11 @@ async function transact(req, res, next) {
     await session.commitTransaction();
 
     return res.status(201).json({
-      balance: transaction.balance,
-      transactionId: transaction._id,
+      message: "Transaction successful",
+      data: {
+        balance: transaction.balance,
+        transactionId: transaction._id,
+      },
     });
   } catch (err) {
     await session.abortTransaction();

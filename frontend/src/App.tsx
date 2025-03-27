@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { NavLink } from "react-router";
 
 import SetupWalletForm from "./components/custom/setup-wallet-form";
 import { getWallet, setupWallet } from "./rest/wallet";
@@ -74,43 +75,43 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-svh pt-20 px-5">
-      <div className="max-w-[700px] w-full">
-        <h1 className="text-3xl mb-3">Wallet System</h1>
-
-        <hr className="mb-5" />
-
-        {!walletId && !walletData && (
-          <SetupWalletForm onSubmit={setupWalletHandler} />
-        )}
-        {walletData && (
-          <div className="">
-            <div className="flex justify-between">
-              <p className="text-sm">
-                Username: <span>{walletData.name}</span>
-              </p>
-              <p className="text-sm">
-                Balance: <span>${walletData.balance}</span>
-              </p>
-            </div>
-            <div className="mt-6">
-              <h2 className="text-xl mb-3">Initiate Transaction</h2>
-              {message?.text && (
-                <p
-                  className={`text-xs mb-3 ${
-                    message?.status === "error"
-                      ? "text-red-500"
-                      : "text-green-500"
-                  }`}
-                >
-                  {message.text}
-                </p>
-              )}
-              <TransactionForm onSubmit={transactHandler} />
-            </div>
+    <div>
+      <NavLink
+        to={"/transactions"}
+        className="text-xs underline block text-blue-500 mb-3 text-right"
+      >
+        View all wallet transactions
+      </NavLink>
+      {!walletId && !walletData && (
+        <SetupWalletForm onSubmit={setupWalletHandler} />
+      )}
+      {walletData && (
+        <div className="">
+          <div className="flex justify-between">
+            <p className="text-sm">
+              Username: <span>{walletData.name}</span>
+            </p>
+            <p className="text-sm">
+              Balance: <span>${walletData.balance}</span>
+            </p>
           </div>
-        )}
-      </div>
+          <div className="mt-6">
+            <h2 className="text-xl mb-3">Initiate Transaction</h2>
+            {message?.text && (
+              <p
+                className={`text-xs mb-3 ${
+                  message?.status === "error"
+                    ? "text-red-500"
+                    : "text-green-500"
+                }`}
+              >
+                {message.text}
+              </p>
+            )}
+            <TransactionForm onSubmit={transactHandler} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

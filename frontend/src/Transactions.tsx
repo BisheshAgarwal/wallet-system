@@ -11,16 +11,17 @@ import {
 } from "./components/ui/table";
 import { Badge } from "./components/ui/badge";
 import { Button } from "./components/ui/button";
+import { Transaction } from "./types";
 
 const walletId = localStorage.getItem("walletId");
-const LIMIT = 3;
+const LIMIT = 10;
 
 const Transactions = () => {
   const navigate = useNavigate();
 
-  const [data, setData] = useState({});
+  const [data, setData] = useState<Record<number, Transaction[]>>({});
   const [page, setPage] = useState(0);
-  const [sortBy, setSortBy] = useState(null);
+  const [sortBy, setSortBy] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
@@ -78,7 +79,7 @@ const Transactions = () => {
       ];
       csvRows.push(headers.join(","));
 
-      transactions.forEach((txn) => {
+      transactions.forEach((txn: Transaction) => {
         const row = [
           txn._id,
           txn.walletId,
@@ -106,7 +107,7 @@ const Transactions = () => {
     }
   };
 
-  const handleSort = (field) => {
+  const handleSort = (field: string) => {
     const newSortOrder =
       sortBy === field && sortOrder === "asc" ? "desc" : "asc";
     setSortBy(field);
@@ -120,8 +121,8 @@ const Transactions = () => {
       }
       if (field === "date") {
         return newSortOrder === "asc"
-          ? new Date(a.date) - new Date(b.date)
-          : new Date(b.date) - new Date(a.date);
+          ? new Date(a.date).getTime() - new Date(b.date).getTime()
+          : new Date(b.date).getTime() - new Date(a.date).getTime();
       }
       return 0;
     });

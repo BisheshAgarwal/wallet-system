@@ -5,13 +5,14 @@ import SetupWalletForm from "./components/custom/setup-wallet-form";
 import { getWallet, setupWallet } from "./rest/wallet";
 import TransactionForm from "./components/custom/transaction-form";
 import { transact } from "./rest/transaction";
+import { ErrorResponse, Message, Transact, Wallet } from "./types";
 
 const walletId = localStorage.getItem("walletId");
 
 function App() {
-  const [walletData, setWalletData] = useState(null);
+  const [walletData, setWalletData] = useState<Wallet | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState<Message | null>(null);
 
   const fetchWalletById = useCallback(async () => {
     try {
@@ -32,7 +33,7 @@ function App() {
     }
   }, [fetchWalletById]);
 
-  const setupWalletHandler = async (data) => {
+  const setupWalletHandler = async (data: Wallet) => {
     try {
       const res = await setupWallet(data);
       const wallet = res.data.data;
@@ -43,24 +44,24 @@ function App() {
     }
   };
 
-  const transactHandler = async (data) => {
+  const transactHandler = async (data: Transact) => {
     try {
       setMessage(null);
       const res = await transact(walletId, data);
       const updatedBalance = res.data.data.balance;
-      setWalletData((prev) => ({
-        ...prev,
-        balance: updatedBalance,
-      }));
+      setWalletData((prev) =>
+        prev ? { ...prev, balance: updatedBalance } : prev
+      );
       setMessage({
         status: "success",
         text: res.data.message,
       });
       console.log(res);
     } catch (error) {
+      const message = (error as ErrorResponse)?.response?.data?.message;
       setMessage({
         status: "error",
-        text: error.response.data.message,
+        text: message || "Something went wrong!",
       });
       console.log(error);
     }

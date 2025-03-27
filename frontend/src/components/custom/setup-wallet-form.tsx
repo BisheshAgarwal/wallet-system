@@ -3,16 +3,17 @@ import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FormData, SetupWalletFormProps } from "@/types";
 
-const SetupWalletForm = ({ onSubmit }) => {
-  const usernameRef = useRef(null);
-  const balanceRef = useRef(null);
+const SetupWalletForm = ({ onSubmit }: SetupWalletFormProps) => {
+  const usernameRef = useRef<HTMLInputElement>(null);
+  const balanceRef = useRef<HTMLInputElement>(null);
 
-  const submitFormHandler = (e) => {
+  const submitFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = {
-      name: usernameRef.current.value,
-      balance: +balanceRef.current.value,
+    const data: FormData = {
+      name: usernameRef.current?.value || "",
+      balance: +(balanceRef.current?.value || 0),
     };
     onSubmit(data);
   };

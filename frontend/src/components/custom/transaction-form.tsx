@@ -3,13 +3,14 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "../ui/button";
+import { TransactionFormProps } from "@/types";
 
-const TransactionForm = ({ onSubmit }) => {
+const TransactionForm = ({ onSubmit }: TransactionFormProps) => {
   const [amount, setAmount] = useState(0);
   const [type, setType] = useState("credit");
   const [description, setDescription] = useState("");
 
-  const submitFormHandler = (e) => {
+  const submitFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const data = {

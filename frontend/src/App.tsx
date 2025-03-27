@@ -10,6 +10,7 @@ const walletId = localStorage.getItem("walletId");
 function App() {
   const [walletData, setWalletData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState(null);
 
   const fetchWalletById = useCallback(async () => {
     try {
@@ -43,14 +44,23 @@ function App() {
 
   const transactHandler = async (data) => {
     try {
+      setMessage(null);
       const res = await transact(walletId, data);
       const updatedBalance = res.data.data.balance;
       setWalletData((prev) => ({
         ...prev,
         balance: updatedBalance,
       }));
+      setMessage({
+        status: "success",
+        text: res.data.message,
+      });
       console.log(res);
     } catch (error) {
+      setMessage({
+        status: "error",
+        text: error.response.data.message,
+      });
       console.log(error);
     }
   };
@@ -85,6 +95,17 @@ function App() {
             </div>
             <div className="mt-6">
               <h2 className="text-xl mb-3">Initiate Transaction</h2>
+              {message?.text && (
+                <p
+                  className={`text-xs mb-3 ${
+                    message?.status === "error"
+                      ? "text-red-500"
+                      : "text-green-500"
+                  }`}
+                >
+                  {message.text}
+                </p>
+              )}
               <TransactionForm onSubmit={transactHandler} />
             </div>
           </div>

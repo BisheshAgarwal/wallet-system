@@ -17,6 +17,7 @@ const routers = require("./routers");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+app.use(express.static("./public"));
 
 routers.map((router) => app.use("/api/", router));
 

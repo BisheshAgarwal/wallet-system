@@ -1,6 +1,6 @@
 "use strict";
 
-const debug = require("debug")("routers");
+const debug = require("debug")("server:routers");
 
 debug("Loading");
 

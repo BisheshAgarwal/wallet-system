@@ -1,6 +1,6 @@
 "use strict";
 
-const debug = require("debug")("transactionController");
+const debug = require("debug")("server:transactionController");
 const { default: mongoose } = require("mongoose");
 
 const Transaction = require("../models/transaction");
@@ -68,6 +68,47 @@ async function transact(req, res, next) {
   }
 }
 
+async function find(req, res, next) {
+  const { walletId, skip = 0, limit = 100 } = req.query;
+
+  try {
+    if (!walletId) {
+      return res.status(400).json({ message: "Invalid wallet id" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(walletId)) {
+      return res.status(400).json({ message: "Invalid wallet ID format" });
+    }
+
+    if (!Number.isInteger(Number(skip)) || Number(skip) < 0) {
+      return res.status(400).json({ message: "Invalid skip value" });
+    }
+
+    if (!Number.isInteger(Number(limit)) || Number(limit) < 0) {
+      return res.status(400).json({ message: "Invalid limit value" });
+    }
+
+    const wallet = await Wallet.findById(walletId);
+
+    if (!wallet) {
+      return res.status(400).json({ message: "Wallet not found" });
+    }
+
+    const transactions = await Transaction.find({ walletId })
+      .skip(skip)
+      .limit(limit);
+
+    return res.status(200).json({
+      message: "Transactions fetched",
+      data: transactions,
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+    next(error);
+  }
+}
+
 module.exports = {
   transact,
+  find,
 };

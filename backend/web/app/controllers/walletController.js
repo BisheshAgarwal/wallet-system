@@ -1,6 +1,6 @@
 "use strict";
 
-const debug = require("debug")("walletController");
+const debug = require("debug")("server:walletController");
 const Wallet = require("../models/wallet");
 
 debug("Loading");

@@ -13,13 +13,15 @@ import { Badge } from "./components/ui/badge";
 import { Button } from "./components/ui/button";
 
 const walletId = localStorage.getItem("walletId");
-const LIMIT = 10;
+const LIMIT = 3;
 
 const Transactions = () => {
   const navigate = useNavigate();
 
   const [data, setData] = useState({});
   const [page, setPage] = useState(0);
+  const [sortBy, setSortBy] = useState(null);
+  const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
     if (!walletId) {
@@ -104,6 +106,32 @@ const Transactions = () => {
     }
   };
 
+  const handleSort = (field) => {
+    const newSortOrder =
+      sortBy === field && sortOrder === "asc" ? "desc" : "asc";
+    setSortBy(field);
+    setSortOrder(newSortOrder);
+
+    const sortedData = [...data[page]].sort((a, b) => {
+      if (field === "amount") {
+        return newSortOrder === "asc"
+          ? a.amount - b.amount
+          : b.amount - a.amount;
+      }
+      if (field === "date") {
+        return newSortOrder === "asc"
+          ? new Date(a.date) - new Date(b.date)
+          : new Date(b.date) - new Date(a.date);
+      }
+      return 0;
+    });
+
+    setData((prev) => ({
+      ...prev,
+      [page]: sortedData,
+    }));
+  };
+
   return (
     <div>
       <NavLink
@@ -121,6 +149,17 @@ const Transactions = () => {
           onClick={exportToCsvHandler}
         >
           Export to CSV
+        </Button>
+      </div>
+
+      <div className="flex gap-4 mb-4">
+        <Button onClick={() => handleSort("amount")}>
+          Sort by Amount{" "}
+          {sortBy === "amount" ? (sortOrder === "asc" ? "↑" : "↓") : ""}
+        </Button>
+        <Button onClick={() => handleSort("date")}>
+          Sort by Date{" "}
+          {sortBy === "date" ? (sortOrder === "asc" ? "↑" : "↓") : ""}
         </Button>
       </div>
 

@@ -1,6 +1,14 @@
+import { ReactNode } from "react";
+
 export interface Wallet {
   name: string;
   balance: number;
+}
+
+export interface WalletState {
+  name: string;
+  balance: number;
+  _id: string;
 }
 
 export interface Message {
@@ -42,4 +50,8 @@ export interface Transaction {
   description?: string;
   type: "CREDIT" | "DEBIT";
   date: string;
+}
+
+export interface Children {
+  children: ReactNode;
 }

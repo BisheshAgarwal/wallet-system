@@ -5,12 +5,12 @@ import SetupWalletForm from "./components/custom/setup-wallet-form";
 import { getWallet, setupWallet } from "./rest/wallet";
 import TransactionForm from "./components/custom/transaction-form";
 import { transact } from "./rest/transaction";
-import { ErrorResponse, Message, Transact, Wallet } from "./types";
+import { ErrorResponse, Message, Transact, Wallet, WalletState } from "./types";
 
-const walletId = localStorage.getItem("walletId");
+let walletId = localStorage.getItem("walletId");
 
 function App() {
-  const [walletData, setWalletData] = useState<Wallet | null>(null);
+  const [walletData, setWalletData] = useState<WalletState | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<Message | null>(null);
 
@@ -39,6 +39,7 @@ function App() {
       const wallet = res.data.data;
       setWalletData(wallet);
       localStorage.setItem("walletId", wallet._id);
+      walletId = wallet._id;
     } catch (error) {
       console.log(error);
     }
@@ -47,7 +48,7 @@ function App() {
   const transactHandler = async (data: Transact) => {
     try {
       setMessage(null);
-      const res = await transact(walletId, data);
+      const res = await transact(walletId || walletData!._id, data);
       const updatedBalance = res.data.data.balance;
       setWalletData((prev) =>
         prev ? { ...prev, balance: updatedBalance } : prev
@@ -56,7 +57,6 @@ function App() {
         status: "success",
         text: res.data.message,
       });
-      console.log(res);
     } catch (error) {
       const message = (error as ErrorResponse)?.response?.data?.message;
       setMessage({

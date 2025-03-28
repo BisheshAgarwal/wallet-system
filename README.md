@@ -1,5 +1,7 @@
 **Hosted at** - https://wallet-system-q3ei.onrender.com
 
+**Alternative (if the former is too slow)** - http://bishesh-wallet-system.eastus.cloudapp.azure.com:9000/
+
 ## Follow below instructions to run the project locally:
 
 ### Backend -

@@ -13,10 +13,10 @@ import { Badge } from "./components/ui/badge";
 import { Button } from "./components/ui/button";
 import { Transaction } from "./types";
 
-const walletId = localStorage.getItem("walletId");
 const LIMIT = 10;
 
 const Transactions = () => {
+  const walletId = localStorage.getItem("walletId");
   const navigate = useNavigate();
 
   const [data, setData] = useState<Record<number, Transaction[]>>({});
@@ -28,7 +28,7 @@ const Transactions = () => {
     if (!walletId) {
       navigate("/");
     }
-  }, [navigate]);
+  }, [navigate, walletId]);
 
   const fetchTransactions = useCallback(async () => {
     try {

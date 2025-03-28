@@ -17,7 +17,7 @@ async function setup(req, res, next) {
       balance &&
       (!Number.isInteger(Number(balance)) || Number(balance) < 0)
     ) {
-      return res.status(400).json({ message: "Invalid skip value" });
+      return res.status(400).json({ message: "Invalid balance value" });
     }
 
     const wallet = await Wallet.findOne({ name });

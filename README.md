@@ -1,4 +1,4 @@
-## Follow below instructions to run the project locally;
+## Follow below instructions to run the project locally:
 
 ### Backend -
 

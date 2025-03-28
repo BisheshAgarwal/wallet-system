@@ -4,6 +4,7 @@ const transactionSchema = new mongoose.Schema({
   walletId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
+    index: true,
   },
   amount: {
     type: Number,

@@ -316,3 +316,48 @@ GET /api/wallet/transactions?walletId=65e8765a9c6d5c00123b4f56&skip=10&limit=5
   "message": "Invalid limit value"
 }
 ```
+
+### Database Design
+
+#### Collections
+
+1. **Wallet**
+
+   - Stores wallet details and balance.
+   - Schema
+
+   ```
+   {
+
+     "name": "String", (required and unique)
+     "balance": "Number", (default 0)
+     "date": "Date" (default Date.now)
+   }
+   ```
+
+2. **Transaction**
+   - Stores individual wallet transactions.
+   - Includes references to the wallet and maintains balance history.
+   - Schema
+   ```
+   {
+     "walletId": "ObjectId", (required and indexed)
+     "amount": "Number", (required)
+     "description": "String",
+     "type": "String", // CREDIT or DEBIT
+     "balance": "Number", (required)
+     "date": "Date" (default Date.now)
+   }
+   ```
+
+### Query Design
+
+1. **Transactions with Atomic Consistency**
+
+   - MongoDB Sessions & Transactions:
+   - Ensures atomic updates when modifying wallet balance and creating a transaction.
+   - Prevents race conditions during concurrent operations by using `session.startTransaction()` and `session.commitTransaction()`.
+
+2. **Efficient Pagination for Transactions**
+   - Uses `.skip()` and `.limit()` for paginated retrieval.
+   - Ensures efficient querying without overloading the database.
